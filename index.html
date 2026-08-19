@@ -55,10 +55,30 @@
     .tab-content.active { display: flex; }
 
     /* Dashboard */
-    .filter-panel { background-color: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+    .filter-panel { background-color: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; align-items: end; }
     .filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
     .filter-group label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; color: var(--porsche-text-muted); text-transform: uppercase; }
     .filter-group select, .filter-group input { background-color: var(--porsche-grey-dark); border: 1px solid var(--porsche-card-border); color: var(--porsche-text); padding: 0.75rem 1rem; border-radius: 2px; font-size: 0.85rem; outline: none; }
+
+    /* Botão Limpar Filtros */
+    .btn-clear-filters {
+      background-color: transparent;
+      border: 1px solid var(--porsche-gold);
+      color: var(--porsche-gold);
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+      height: 42px;
+    }
+    .btn-clear-filters:hover {
+      background-color: var(--porsche-gold);
+      color: #000;
+    }
 
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
     .kpi-card { background-color: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 1.5rem; position: relative; }
@@ -128,6 +148,7 @@
         <div class="filter-group"><label>Ano Modelo</label><select id="filterYear" onchange="applyFilters()"><option value="">Todos</option></select></div>
         <div class="filter-group"><label>Cidade</label><select id="filterCity" onchange="applyFilters()"><option value="">Todas</option></select></div>
         <div class="filter-group"><label>Pagamento</label><select id="filterPay" onchange="applyFilters()"><option value="">Todas</option></select></div>
+        <button class="btn-clear-filters" onclick="clearFilters()">Limpar Filtros</button>
       </div>
 
       <div class="kpi-grid">
@@ -249,7 +270,7 @@
             <span class="history-year">Estreia: 2014</span>
           </div>
           <p class="history-p">
-            Lançado em 2014 e batizado com a palavra indonésia para "Tigre", o <span class="history-highlight">Porsche Macan</span> brought a agilidade e a posição esportiva de dirigir para o segmento de SUVs compactos de luxo, tornando-se rapidamente o modelo mais vendido e popular da marca em todo o mundo.
+            Lançado em 2014 e batizado com a palavra indonésia para "Tigre", o <span class="history-highlight">Porsche Macan</span> trouxe a agilidade e a posição esportiva de dirigir para o segmento de SUVs compactos de luxo, tornando-se rapidamente o modelo mais vendido e popular da marca em todo o mundo.
           </p>
         </article>
 
@@ -360,6 +381,15 @@
       renderDashboard(filtered);
     }
 
+    // Função para Limpar Filtros de uma só vez
+    function clearFilters() {
+      document.getElementById("filterModel").value = "";
+      document.getElementById("filterYear").value = "";
+      document.getElementById("filterCity").value = "";
+      document.getElementById("filterPay").value = "";
+      renderDashboard(porscheData);
+    }
+
     function renderDashboard(data) {
       if (data.length === 0) return;
       const totalRev = data.reduce((acc, curr) => acc + curr.price, 0);
@@ -382,7 +412,15 @@
       payChartInstance = new Chart(ctxPay, {
         type: 'doughnut',
         data: { labels: Object.keys(payMap), datasets: [{ data: Object.values(payMap), backgroundColor: ['#d5001c','#c2a649','#8e8e93','#38383e'] }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false, 
+          plugins: { 
+            legend: { 
+              display: false  // Remoção dos quadrados de legenda
+            } 
+          } 
+        }
       });
 
       const tbody = document.getElementById("cityTableBody");
