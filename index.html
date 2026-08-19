@@ -54,7 +54,7 @@
     .tab-content { display: none; flex-direction: column; gap: 2rem; }
     .tab-content.active { display: flex; }
 
-    /* Estilos Dashboard */
+    /* Dashboard */
     .filter-panel { background-color: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
     .filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
     .filter-group label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; color: var(--porsche-text-muted); text-transform: uppercase; }
@@ -81,7 +81,7 @@
     th { background-color: var(--porsche-grey-dark); color: var(--porsche-text-muted); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid var(--porsche-card-border); }
     td { padding: 0.9rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
 
-    /* Seção História */
+    /* História */
     .history-container { display: flex; flex-direction: column; gap: 2rem; }
     .history-card-long { background: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 2rem; display: flex; flex-direction: column; gap: 1.2rem; position: relative; }
     .history-card-long::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--porsche-gold); }
@@ -95,13 +95,6 @@
     /* Performance Specs */
     .specs-table-container { background: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); border-radius: 4px; padding: 1.5rem; overflow-x: auto; }
     .pill-accent { background: rgba(213, 0, 28, 0.15); color: var(--porsche-red); font-weight: 700; padding: 3px 8px; border-radius: 2px; font-size: 0.75rem; }
-
-    /* Seção CRUD (Gestão de Compras) */
-    .crud-container { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
-    @media (max-width: 1024px) { .crud-container { grid-template-columns: 1fr; } }
-    .form-card { background: var(--porsche-dark-card); border: 1px solid var(--porsche-card-border); padding: 1.5rem; border-radius: 4px; display: flex; flex-direction: column; gap: 1.2rem; }
-    .btn-submit { background: var(--porsche-red); color: #fff; border: none; padding: 0.8rem 1.5rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: var(--transition-smooth); }
-    .btn-submit:hover { background: var(--porsche-red-hover); }
 
     /* Concessionárias */
     .dealers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
@@ -123,7 +116,6 @@
       <button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard Vendas</button>
       <button class="nav-btn" onclick="switchTab('history', this)">História dos Ícones</button>
       <button class="nav-btn" onclick="switchTab('specs', this)">Performance & Specs</button>
-      <button class="nav-btn" onclick="switchTab('crud', this)">Gestão de Compras (CRUD)</button>
       <button class="nav-btn" onclick="switchTab('dealers', this)">Concessionárias</button>
     </nav>
   </header>
@@ -168,9 +160,27 @@
       </div>
     </section>
 
-    <!-- TAB 2: HISTÓRIA NARRATIVA DETALHADA -->
+    <!-- TAB 2: HISTÓRIA DA MARCA & DOS ÍCONES -->
     <section id="history" class="tab-content">
       <div class="history-container">
+        
+        <!-- CARD DA MARCA PORSCHE -->
+        <article class="history-card-long accent" style="border: 1px solid var(--porsche-gold);">
+          <div class="history-header">
+            <h2 class="history-title-large" style="color: var(--porsche-gold-light);">A História da Marca: Tradição, Competição e Engenharia</h2>
+            <span class="history-year">Fundada em 1931</span>
+          </div>
+          <p class="history-p">
+            A saga da <span class="history-highlight">Porsche AG</span> teve início em 1931, quando o lendário engenheiro austríaco <span class="history-highlight">Ferdinand Porsche</span> abriu seu escritório de consultoria em Stuttgart, Alemanha. Inicialmente focado no desenvolvimento de veículos e motores para terceiros — incluindo a criação do icônico Fusca original —, foi apenas em <span class="history-highlight">8 de junho de 1948</span> que o primeiro automóvel trazendo oficialmente o nome da família obteve autorização de rodagem: o incomparável <span class="history-highlight">Porsche 356 "No. 1" Roadster</span>, idealizado por Ferry Porsche (filho de Ferdinand). Uma célebre máxima de Ferry sintetiza a essência da marca: <em>"Eu olhei ao redor e não consegui encontrar o carro dos meus sonhos. Então, decidi construí-lo eu mesmo."</em>
+          </p>
+          <p class="history-p">
+            O famoso <span class="history-highlight">Brasão Porsche</span>, introduzido em 1952, carrega um simbolismo histórico profundo: no centro está o cavalo empinado do brasão oficial da cidade de Stuttgart (cujo nome deriva de *Stutengarten*, um antigo haras), cercado pelas hastes de cervo e pelas faixas pretas e vermelhas do estado histórico de Württemberg-Hohenzollern.
+          </p>
+          <p class="history-p">
+            O verdadeiro DNA da Porsche foi forçado no fogo do automobilismo. Com mais de <span class="history-highlight">30.000 vitórias esportivas</span> acumuladas e uma marca recorde de <span class="history-highlight">19 vitórias gerais nas 24 Horas de Le Mans</span>, a marca adota a premissa de que a pista de corrida é o laboratório de testes mais rigoroso para os seus carros de rua. Esse compromisso inegociável com a eficiência, durabilidade e engenharia de precisão tornou a Porsche a fabricante de esportivos de maior sucesso da história do automobilismo.
+          </p>
+        </article>
+
         <!-- 911 -->
         <article class="history-card-long accent">
           <div class="history-header">
@@ -178,10 +188,10 @@
             <span class="history-year">Estreia: 1963</span>
           </div>
           <p class="history-p">
-            A história do <span class="history-highlight">Porsche 911</span> começou oficialmente no Salão de Frankfurt em setembro de 1963, sob o código de projeto original <span class="history-highlight">901</span>. Projetado por Ferdinand "Butzi" Porsche, o modelo substituiu o clássico 356. Devido a uma disputa de patentes com a Peugeot sobre nomes com zero central, o carro foi renomeado para 911, inaugurando a linhagem mais reverenciada da história automotiva.
+            A história do <span class="history-highlight">Porsche 911</span> começou oficialmente no Salão de Frankfurt em setembro de 1963, sob o código de projeto original <span class="history-highlight">901</span>. Projetado por Ferdinand "Butzi" Porsche, o modelo foi criado para substituir o consagrado 356. No entanto, uma disputa comercial com a francesa Peugeot (que detinha a patente de nomes de três dígitos com zero no meio) forçou a alteração do nome para 911, originando o esportivo mais icônico de todos os tempos.
           </p>
           <p class="history-p">
-            A arquitetura com o motor boxer seis cilindros montado atrás do eixo traseiro desafiou as leis da física tradicionais. Aperfeiçoado ao longo de oito gerações, o 911 transformou uma suposta limitação em uma tração incomparável nas saídas de curva, somando mais de 30.000 vitórias no automobilismo mundial.
+            A arquitetura única com o motor boxer seis cilindros montado atrás do eixo traseiro desafiou as leis convencionais da física. Aperfeiçoado ao longo de oito gerações (da clássica série F até a atual geração 992), o 911 converteu essa distribuição de peso em uma tração inigualável nas saídas de curva e em um design atemporal reconhecido em qualquer lugar do mundo.
           </p>
         </article>
 
@@ -192,10 +202,10 @@
             <span class="history-year">Estreia: 1996</span>
           </div>
           <p class="history-p">
-            Lançado em 1996 para salvar financeiramente a empresa, o <span class="history-highlight">Porsche Boxster</span> combinou a arquitetura do motor Boxer com a elegância de um Roadster de motor central. A distribuição ideal de peso 50:50 estabeleceu uma agilidade de referência em curvas.
+            Lançado em 1996 para reestruturar a marca em um momento financeiro delicado, o <span class="history-highlight">Porsche Boxster</span> combinou o motor Boxer com a leveza de um Roadster de motor central. Sua distribuição de peso perfeita de 50:50 redefiniu os padrões de agilidade e dinâmica em curvas.
           </p>
           <p class="history-p">
-            Em 2005 foi apresentado o cupê fechado <span class="history-highlight">Cayman</span>, e em 2016 a linha recebeu o prefixo 718 em homenagem ao protótipo de corrida vencedor da Targa Florio de 1957.
+            Em 2005 foi apresentada a versão cupê <span class="history-highlight">Cayman</span>, e em 2016 a linha adotou a numeração 718 em homenagem ao lendário protótipo leve de corrida que venceu corridas históricas como a Targa Florio em 1957.
           </p>
         </article>
 
@@ -206,9 +216,43 @@
             <span class="history-year">Estreia: 2019</span>
           </div>
           <p class="history-p">
-            Primeiro esportivo $100\%$ elétrico da marca, o <span class="history-highlight">Porsche Taycan</span> nasceu do conceito Mission E. Pioneiro na utilização de arquitetura elétrica de <span class="history-highlight">800 Volts</span>, garante recargas ultra-rápidas e aceleração repetível sem perda de rendimento.
+            Primeiro veículo $100\%$ elétrico de produção da marca, o <span class="history-highlight">Porsche Taycan</span> nasceu do carro-conceito Mission E. Introduziu o uso pioneiro de uma arquitetura elétrica de <span class="history-highlight">800 Volts</span> e uma transmissão de duas marchas no eixo traseiro, garantindo acelerações impressionantes e repetíveis com tempos de recarga recordes.
           </p>
         </article>
+
+        <!-- PANAMERA -->
+        <article class="history-card-long">
+          <div class="history-header">
+            <h2 class="history-title-large">Porsche Panamera: O Sedã Executivo com Genética de Corrida</h2>
+            <span class="history-year">Estreia: 2009</span>
+          </div>
+          <p class="history-p">
+            Apresentado no Salão de Xangai em 2009 e batizado em homenagem à famosa corrida mexicana *Carrera Panamericana*, o <span class="history-highlight">Porsche Panamera</span> uniu o conforto de uma limusine de luxo de quatro lugares com a alma e o desempenho de um superesportivo puro de pista.
+          </p>
+        </article>
+
+        <!-- CAYENNE -->
+        <article class="history-card-long accent">
+          <div class="history-header">
+            <h2 class="history-title-large">Porsche Cayenne: O SUV que Redefiniu o Segmento de Luxo</h2>
+            <span class="history-year">Estreia: 2002</span>
+          </div>
+          <p class="history-p">
+            Lançado em 2002 sob o *Projeto Colorado*, o <span class="history-highlight">Porsche Cayenne</span> superou todas as desconfianças iniciais e criou a categoria de SUVs de altíssima performance. Seu enorme sucesso de vendas gerou os recursos necessários para a Porsche continuar investindo no desenvolvimento dos maiores superesportivos do planeta.
+          </p>
+        </article>
+
+        <!-- MACAN -->
+        <article class="history-card-long">
+          <div class="history-header">
+            <h2 class="history-title-large">Porsche Macan: A Dinâmica Urbana e o Best-Seller Global</h2>
+            <span class="history-year">Estreia: 2014</span>
+          </div>
+          <p class="history-p">
+            Lançado em 2014 e batizado com a palavra indonésia para "Tigre", o <span class="history-highlight">Porsche Macan</span> brought a agilidade e a posição esportiva de dirigir para o segmento de SUVs compactos de luxo, tornando-se rapidamente o modelo mais vendido e popular da marca em todo o mundo.
+          </p>
+        </article>
+
       </div>
     </section>
 
@@ -239,73 +283,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: GESTÃO DE COMPRAS (SISTEMA CRUD / LOCALSTORAGE) -->
-    <section id="crud" class="tab-content">
-      <div class="crud-container">
-        <!-- Formulário de Cadastro/Edição -->
-        <div class="form-card">
-          <div class="chart-title" id="formTitle">Cadastrar Intenção de Compra</div>
-          <form id="purchaseForm" onsubmit="saveCustomer(event)">
-            <input type="hidden" id="customerId">
-            <div class="filter-group"><label>Nome Completo</label><input type="text" id="custName" required placeholder="Ex: Carlos Silva"></div>
-            <div class="filter-group">
-              <label>Gênero</label>
-              <select id="custGender" required>
-                <option value="Homem">Homem</option>
-                <option value="Mulher">Mulher</option>
-                <option value="Outro">Outro</option>
-              </select>
-            </div>
-            <div class="filter-group"><label>CPF</label><input type="text" id="custCPF" required placeholder="000.000.000-00"></div>
-            <div class="filter-group"><label>CEP</label><input type="text" id="custCEP" required placeholder="00000-000"></div>
-            <div class="filter-group"><label>Modelo de Interesse</label>
-              <select id="custModel" required>
-                <option value="911 Carrera">911 Carrera</option>
-                <option value="911 Turbo S">911 Turbo S</option>
-                <option value="718 Cayman">718 Cayman</option>
-                <option value="Taycan 4S">Taycan 4S</option>
-                <option value="Panamera">Panamera</option>
-                <option value="Cayenne Coupe">Cayenne Coupe</option>
-                <option value="Macan GTS">Macan GTS</option>
-              </select>
-            </div>
-            <div class="filter-group"><label>Forma de Pagamento</label>
-              <select id="custPay" required>
-                <option value="Wire Transfer">Wire Transfer</option>
-                <option value="Financing">Financing</option>
-                <option value="Credit Card">Credit Card</option>
-                <option value="Cash">Cash</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-submit" id="btnSubmit">Salvar Cadastro</button>
-            <button type="button" class="btn-submit" id="btnCancel" onclick="resetForm()" style="background:#38383e; display:none; margin-top:0.5rem;">Cancelar Edição</button>
-          </form>
-        </div>
-
-        <!-- Tabela CRUD (Exibição e Ações) -->
-        <div class="chart-card">
-          <div class="chart-title">Intenções Registradas (Sistema CRUD)</div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Gênero</th>
-                  <th>CPF</th>
-                  <th>CEP</th>
-                  <th>Modelo</th>
-                  <th>Pagamento</th>
-                  <th>Ações (CRUD)</th>
-                </tr>
-              </thead>
-              <tbody id="crudTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 5: CONCESSIONÁRIAS -->
+    <!-- TAB 4: CONCESSIONÁRIAS -->
     <section id="dealers" class="tab-content">
       <div class="chart-title" style="margin-bottom: 1rem;">Porsche Centers no Brasil</div>
       <div class="dealers-grid">
@@ -318,7 +296,7 @@
   </main>
 
   <footer>
-    Porsche Brasil Intelligence Platform &copy; 2026 - Sistema CRUD Integrado.
+    Porsche Brasil Intelligence Platform &copy; 2026 - Plataforma Oficial de Vendas & Experiência.
   </footer>
 
   <script>
@@ -349,7 +327,6 @@
     document.addEventListener("DOMContentLoaded", () => {
       populateFilters();
       renderDashboard(porscheData);
-      renderCRUDTable();
     });
 
     function populateFilters() {
@@ -415,102 +392,6 @@
         tr.innerHTML = `<td><strong>${d.city}</strong></td><td>${d.model}</td><td>Esportivo</td><td>1</td><td>$ ${d.price.toLocaleString()}</td><td>${d.pay}</td>`;
         tbody.appendChild(tr);
       });
-    }
-
-    // LÓGICA DO SISTEMA CRUD (Create, Read, Update, Delete)
-    function getStoredCustomers() {
-      return JSON.parse(localStorage.getItem("porsche_customers") || "[]");
-    }
-
-    function saveCustomer(e) {
-      e.preventDefault();
-      const id = document.getElementById("customerId").value;
-      const customer = {
-        id: id ? id : Date.now(),
-        name: document.getElementById("custName").value,
-        gender: document.getElementById("custGender").value,
-        cpf: document.getElementById("custCPF").value,
-        cep: document.getElementById("custCEP").value,
-        model: document.getElementById("custModel").value,
-        pay: document.getElementById("custPay").value
-      };
-
-      let customers = getStoredCustomers();
-      if (id) {
-        // UPDATE (Atualizar)
-        customers = customers.map(c => c.id == id ? customer : c);
-      } else {
-        // CREATE (Criar)
-        customers.push(customer);
-      }
-
-      localStorage.setItem("porsche_customers", JSON.stringify(customers));
-      resetForm();
-      renderCRUDTable();
-    }
-
-    // READ (Ler/Exibir)
-    function renderCRUDTable() {
-      const customers = getStoredCustomers();
-      const tbody = document.getElementById("crudTableBody");
-      tbody.innerHTML = "";
-
-      if (customers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--porsche-text-muted);">Nenhum cadastro registrado no momento.</td></tr>`;
-        return;
-      }
-
-      customers.forEach(c => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${c.name}</strong></td>
-          <td>${c.gender}</td>
-          <td>${c.cpf}</td>
-          <td>${c.cep}</td>
-          <td>${c.model}</td>
-          <td>${c.pay}</td>
-          <td>
-            <button onclick="editCustomer(${c.id})" style="background:none; border:none; color:var(--porsche-gold); cursor:pointer; font-weight:600; margin-right:12px;">Editar</button>
-            <button onclick="deleteCustomer(${c.id})" style="background:none; border:none; color:var(--porsche-red); cursor:pointer; font-weight:600;">Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // PREPARAR PARA UPDATE
-    function editCustomer(id) {
-      const customer = getStoredCustomers().find(c => c.id == id);
-      if (customer) {
-        document.getElementById("customerId").value = customer.id;
-        document.getElementById("custName").value = customer.name;
-        document.getElementById("custGender").value = customer.gender;
-        document.getElementById("custCPF").value = customer.cpf;
-        document.getElementById("custCEP").value = customer.cep;
-        document.getElementById("custModel").value = customer.model;
-        document.getElementById("custPay").value = customer.pay;
-
-        document.getElementById("formTitle").innerText = "Editar Cadastro";
-        document.getElementById("btnSubmit").innerText = "Atualizar Cadastro";
-        document.getElementById("btnCancel").style.display = "block";
-      }
-    }
-
-    // DELETE (Excluir)
-    function deleteCustomer(id) {
-      if (confirm("Deseja realmente excluir este cadastro?")) {
-        let customers = getStoredCustomers().filter(c => c.id != id);
-        localStorage.setItem("porsche_customers", JSON.stringify(customers));
-        renderCRUDTable();
-      }
-    }
-
-    function resetForm() {
-      document.getElementById("purchaseForm").reset();
-      document.getElementById("customerId").value = "";
-      document.getElementById("formTitle").innerText = "Cadastrar Intenção de Compra";
-      document.getElementById("btnSubmit").innerText = "Salvar Cadastro";
-      document.getElementById("btnCancel").style.display = "none";
     }
   </script>
 </body>
