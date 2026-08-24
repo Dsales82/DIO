@@ -91,15 +91,16 @@
     font-size:12px;font-weight:600;color:var(--brand-dark);
     background:var(--brand-soft);padding:6px 12px;border-radius:999px;
   }
-  .month-picker{
-    display:flex;align-items:center;gap:9px;
-    background:var(--surface);border:1px solid var(--border);
-    padding:7px 14px;border-radius:999px;box-shadow:var(--shadow-card);
-  }
-  .month-picker label{font-size:11px;color:var(--ink-faint);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-  .month-picker select{
-    border:none;background:transparent;color:var(--brand-dark);
-    font-family:var(--font-ui);font-weight:700;font-size:13.5px;outline:none;cursor:pointer;
+
+  .btn-theme-toggle {
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 
   /* Tabs Bar */
@@ -265,13 +266,8 @@
     </div>
 
     <div class="top-right-controls">
-      <button class="btn ghost small" onclick="toggleDarkMode()">Modo Escuro / Claro</button>
+      <button class="btn ghost btn-theme-toggle" id="themeToggleBtn" onclick="toggleDarkMode()" title="Alternar Modo Escuro/Claro">☀️</button>
       <div class="today-badge" id="todayBadge">Data Atual</div>
-      
-      <div class="month-picker" id="monthPickerContainer">
-        <label for="mesAno">Mês</label>
-        <select id="mesAno"></select>
-      </div>
     </div>
   </div>
 
@@ -320,7 +316,7 @@
           <tr>
             <th>Categoria</th>
             <th class="num">Orçamento</th>
-            <th class="num">Gasto no mês</th>
+            <th class="num">Gasto Total</th>
             <th class="num">% Utilizado</th>
             <th class="num">Saldo</th>
             <th style="text-align:right;">Ações</th>
@@ -423,7 +419,7 @@
 
     <!-- TAB 3: DASHBOARD -->
     <section id="tab-dashboard" style="display:none;">
-      <h2 class="section-title">Dashboard do Mês</h2>
+      <h2 class="section-title">Dashboard Analítico</h2>
       <p class="section-sub">Resumo analítico gerado automaticamente a partir dos lançamentos.</p>
 
       <div class="kpi-grid" id="kpiGrid"></div>
@@ -441,7 +437,7 @@
 
       <div class="charts-grid">
         <div class="chart-box">
-          <h3>Top 3 Maiores Gastos do Mês</h3>
+          <h3>Top 3 Maiores Gastos</h3>
           <div id="top3Custom"></div>
         </div>
         <div class="chart-box">
@@ -489,12 +485,10 @@
 
   function pad(n){return String(n).padStart(2,"0");}
   const hoje = new Date();
-  const mesAtual = `${hoje.getFullYear()}-${pad(hoje.getMonth()+1)}`;
 
   const dataExtenso = hoje.toLocaleDateString("pt-BR", { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   document.getElementById("todayBadge").textContent = dataExtenso.charAt(0).toUpperCase() + dataExtenso.slice(1);
 
-  let mesSelecionado = mesAtual;
   let activeTab = "categorias";
 
   const fmtBRL = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
@@ -507,27 +501,6 @@
     return state.categorias.findIndex(c=>c.id===id);
   }
 
-  function populaMesAno(){
-    const sel = document.getElementById("mesAno");
-    const meses = new Set([mesAtual]);
-    state.lancamentos.forEach(l=>meses.add(l.data.slice(0,7)));
-    const lista = Array.from(meses).sort();
-    sel.innerHTML = lista.map(m=>{
-      const [y,mo] = m.split("-");
-      const nomeMes = new Date(y,mo-1,1).toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
-      return `<option value="${m}" ${m===mesSelecionado?"selected":""}>${nomeMes}</option>`;
-    }).join("");
-    if(!lista.includes(mesSelecionado)){
-      mesSelecionado = mesAtual;
-      sel.value = mesSelecionado;
-    }
-  }
-
-  document.getElementById("mesAno").addEventListener("change", e=>{
-    mesSelecionado = e.target.value;
-    renderAll();
-  });
-
   document.getElementById("tabs").addEventListener("click", e=>{
     const btn = e.target.closest(".tab-btn");
     if(!btn) return;
@@ -536,9 +509,6 @@
     ["categorias","lancamentos","dashboard"].forEach(t=>{
       document.getElementById("tab-"+t).style.display = (t===activeTab)?"block":"none";
     });
-
-    // Ocultar seletor de mês na aba "Categorias"
-    document.getElementById("monthPickerContainer").style.display = (activeTab === "categorias") ? "none" : "flex";
 
     if(activeTab==="dashboard") renderDashboard();
   });
@@ -549,9 +519,9 @@
     document.getElementById("fCategoria").innerHTML = `<option value="">Todas as categorias</option>` + opts;
   }
 
-  function gastoDaCategoriaNoMes(catId, mes){
+  function gastoTotalDaCategoria(catId){
     return state.lancamentos
-      .filter(l=>l.categoriaId===catId && l.data.slice(0,7)===mes)
+      .filter(l=>l.categoriaId===catId)
       .reduce((s,l)=>s+l.valor,0);
   }
 
@@ -563,7 +533,7 @@
       return;
     }
     tbody.innerHTML = state.categorias.map((c,idx)=>{
-      const gasto = gastoDaCategoriaNoMes(c.id, mesSelecionado);
+      const gasto = gastoTotalDaCategoria(c.id);
       const pct = c.orcamento>0 ? (gasto/c.orcamento*100) : 0;
       const saldo = c.orcamento - gasto;
       const over = pct>100;
@@ -634,7 +604,6 @@
   /* CRUD LANÇAMENTOS */
   function lancamentosFiltrados(){
     return state.lancamentos.filter(l=>{
-      if(l.data.slice(0,7)!==mesSelecionado) return false;
       if(state.filtros.categoria && l.categoriaId!==state.filtros.categoria) return false;
       if(state.filtros.tipo && l.tipo!==state.filtros.tipo) return false;
       if(state.filtros.status && l.status!==state.filtros.status) return false;
@@ -653,7 +622,7 @@
     const tbody = document.getElementById("lancTableBody");
     const linhas = lancamentosFiltrados();
     if(linhas.length===0){
-      tbody.innerHTML = `<tr><td colspan="8" class="empty-note">Nenhum lançamento encontrado no mês selecionado.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="empty-note">Nenhum lançamento encontrado.</td></tr>`;
       return;
     }
     tbody.innerHTML = linhas.map(l=>{
@@ -704,9 +673,6 @@
 
     saveState();
     resetLancForm();
-    populaMesAno();
-    mesSelecionado = data.slice(0,7);
-    document.getElementById("mesAno").value = mesSelecionado;
     renderAll();
   });
 
@@ -728,7 +694,6 @@
   window.removerLancamento = function(id){
     state.lancamentos = state.lancamentos.filter(l=>l.id!==id);
     saveState();
-    populaMesAno();
     renderAll();
   };
 
@@ -752,46 +717,33 @@
     renderLancamentos();
   });
 
-  function gastosDoMes(){
-    return state.lancamentos.filter(l=>l.data.slice(0,7)===mesSelecionado);
-  }
-
-  function diasNoMes(mes){
-    const [y,m] = mes.split("-").map(Number);
-    return new Date(y,m,0).getDate();
-  }
-
   /* DASHBOARD E GRÁFICOS */
   function renderDashboard(){
-    const gastos = gastosDoMes();
+    const gastos = state.lancamentos;
     const totalGasto = gastos.reduce((s,l)=>s+l.valor,0);
     const totalOrcado = state.categorias.reduce((s,c)=>s+c.orcamento,0);
     const saldo = totalOrcado - totalGasto;
     const pctUtilizado = totalOrcado>0 ? (totalGasto/totalOrcado*100) : 0;
     const ticketMedio = gastos.length>0 ? totalGasto/gastos.length : 0;
 
-    let diasBase = (mesSelecionado===mesAtual) ? hoje.getDate() : diasNoMes(mesSelecionado);
-    const gastoMedioDiario = diasBase>0 ? totalGasto/diasBase : 0;
-
     document.getElementById("kpiGrid").innerHTML = `
-      <div class="kpi-card"><div class="kpi-label">Total gasto no mês</div><div class="kpi-value">${fmtBRL(totalGasto)}</div></div>
-      <div class="kpi-card"><div class="kpi-label">Total orçado</div><div class="kpi-value">${fmtBRL(totalOrcado)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Total Gasto</div><div class="kpi-value">${fmtBRL(totalGasto)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Total Orçado</div><div class="kpi-value">${fmtBRL(totalOrcado)}</div></div>
       <div class="kpi-card ${saldo<0?"alert":""}">
-        <div class="kpi-label">Saldo do orçamento</div>
+        <div class="kpi-label">Saldo do Orçamento</div>
         <div class="kpi-value ${saldo<0?"red":"green"}">${fmtBRL(saldo)}</div>
       </div>
       <div class="kpi-card ${pctUtilizado>100?"alert":""}">
-        <div class="kpi-label">% do orçamento utilizado</div>
+        <div class="kpi-label">% Orçamento Utilizado</div>
         <div class="kpi-value ${pctUtilizado>100?"red":""}">${pctUtilizado.toFixed(0)}%</div>
       </div>
-      <div class="kpi-card"><div class="kpi-label">Ticket médio</div><div class="kpi-value">${fmtBRL(ticketMedio)}</div></div>
-      <div class="kpi-card"><div class="kpi-label">Gasto médio diário</div><div class="kpi-value">${fmtBRL(gastoMedioDiario)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Ticket Médio</div><div class="kpi-value">${fmtBRL(ticketMedio)}</div></div>
     `;
 
     // 1. Gráfico de Colunas: Orçado x Gasto Real por Categoria
     const catLabels = state.categorias.map(c=>c.nome);
     const catOrcados = state.categorias.map(c=>c.orcamento);
-    const catGastos = state.categorias.map(c=>gastoDaCategoriaNoMes(c.id, mesSelecionado));
+    const catGastos = state.categorias.map(c=>gastoTotalDaCategoria(c.id));
 
     const ctxBar = document.getElementById("chartCatBar").getContext("2d");
     if(chartCatInstance) chartCatInstance.destroy();
@@ -840,12 +792,12 @@
       }
     });
 
-    // 3. Card Top 3 Maiores Gastos do Mês (Barras com Degradê & Percentual)
+    // 3. Card Top 3 Maiores Gastos
     const top3 = [...gastos].sort((a,b)=>b.valor-a.valor).slice(0,3);
     const top3Container = document.getElementById("top3Custom");
     
     if(top3.length === 0){
-      top3Container.innerHTML = `<p class="empty-note">Nenhum gasto registrado neste mês.</p>`;
+      top3Container.innerHTML = `<p class="empty-note">Nenhum gasto registrado.</p>`;
     } else {
       top3Container.innerHTML = top3.map((l, i)=>{
         const pctImpacto = totalGasto > 0 ? ((l.valor / totalGasto) * 100).toFixed(1) : "0.0";
@@ -863,18 +815,18 @@
       }).join("");
     }
 
-    // 4. Card Categorias Estouradas (Barras de Excedente com Degradê Vermelho)
+    // 4. Card Categorias Estouradas
     const alertContainer = document.getElementById("alertListCustom");
     const estouradas = state.categorias.filter(c=>{
-      const g = gastoDaCategoriaNoMes(c.id, mesSelecionado);
+      const g = gastoTotalDaCategoria(c.id);
       return c.orcamento > 0 && g > c.orcamento;
     });
 
     if(estouradas.length === 0){
-      alertContainer.innerHTML = `<p class="empty-note">Nenhuma categoria estourou o orçamento neste mês.</p>`;
+      alertContainer.innerHTML = `<p class="empty-note">Nenhuma categoria estourou o orçamento.</p>`;
     } else {
       alertContainer.innerHTML = estouradas.map(c=>{
-        const g = gastoDaCategoriaNoMes(c.id, mesSelecionado);
+        const g = gastoTotalDaCategoria(c.id);
         const excedente = g - c.orcamento;
         const pctEstouro = ((g / c.orcamento) * 100).toFixed(1);
         const barWidth = Math.min(pctEstouro, 100);
@@ -903,7 +855,7 @@
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `controle_financeiro_${mesSelecionado}.csv`;
+    link.download = `controle_financeiro.csv`;
     link.click();
   };
 
@@ -911,7 +863,7 @@
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
     const link = document.createElement("a");
     link.href = dataStr;
-    link.download = `backup_financeiro_${mesSelecionado}.json`;
+    link.download = `backup_financeiro.json`;
     link.click();
   };
 
@@ -938,11 +890,12 @@
   };
 
   window.toggleDarkMode = function(){
-    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.toggle("dark-mode");
+    const btn = document.getElementById("themeToggleBtn");
+    btn.textContent = isDark ? "🌙" : "☀️";
   };
 
   function renderAll(){
-    populaMesAno();
     populaCategoriaSelects();
     renderCategorias();
     renderLancamentos();
@@ -950,9 +903,6 @@
   }
 
   document.getElementById("lData").value = `${hoje.getFullYear()}-${pad(hoje.getMonth()+1)}-${pad(hoje.getDate())}`;
-  
-  // Ocultar seletor de mês ao iniciar na aba "Categorias"
-  document.getElementById("monthPickerContainer").style.display = "none";
   
   renderAll();
 })();
