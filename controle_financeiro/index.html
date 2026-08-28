@@ -7,6 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Bibliotecas para Geração de PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
 <style>
   :root {
     --bg: #f4f5fa;
@@ -65,7 +69,6 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
   html, body { width: 100%; overflow-x: hidden; }
 
   body {
@@ -79,7 +82,6 @@
 
   .wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
-  /* Header Banner */
   .header-banner {
     width: 100%;
     background: var(--brand-gradient);
@@ -104,44 +106,30 @@
     border-radius: var(--radius-md);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    flex-shrink: 0;
+    color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); flex-shrink: 0;
   }
 
-  .brand-titles h1 {
-    font-family: var(--font-display);
-    font-size: clamp(1.25rem, 3.5vw, 1.6rem);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: #ffffff;
-  }
-
+  .brand-titles h1 { font-family: var(--font-display); font-size: clamp(1.25rem, 3.5vw, 1.6rem); font-weight: 800; color: #ffffff; }
   .brand-titles p { font-size: 0.78rem; color: rgba(255, 255, 255, 0.8); font-weight: 500; }
 
   .banner-controls { display: flex; align-items: center; gap: 0.75rem; }
 
   .today-badge {
     font-size: 0.75rem; font-weight: 600; color: #ffffff;
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(8px);
-    padding: 0.5rem 1rem; border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px);
+    padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .btn-theme-toggle {
-    min-height: 40px; width: 40px; height: 40px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; background: rgba(255, 255, 255, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(8px);
+    min-height: 40px; width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .lamp-icon { width: 22px; height: 22px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   body:not(.dark-mode) .lamp-icon { stroke: #fbbf24; filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8)); }
   body.dark-mode .lamp-icon { stroke: #9ca3af; }
 
-  /* Tabs Bar */
   .tabs-bar { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.25rem; }
   .tabs-wrapper { width: 100%; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
   .tabs { display: flex; gap: 0.35rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; width: max-content; box-shadow: var(--shadow-card); }
@@ -169,23 +157,18 @@
   .dropdown-content button:hover { background-color: var(--subcard); }
   .dropdown-menu-container:hover .dropdown-content { display: block; }
 
-  /* Main Card */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    padding: clamp(1.1rem, 2.5vw, 1.8rem);
-    width: 100%;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+    padding: clamp(1.1rem, 2.5vw, 1.8rem); width: 100%;
   }
 
   h2.section-title { font-family: var(--font-display); font-size: clamp(1.1rem, 2.5vw, 1.35rem); font-weight: 800; margin-bottom: 0.25rem; color: var(--ink); }
   .section-sub { font-size: 0.825rem; color: var(--ink-soft); margin-bottom: 1.25rem; }
 
-  /* Add Transaction Split Dropdown Button */
   .add-action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-  
   .btn-add-dropdown { position: relative; display: inline-block; }
+  
   .btn-circle-add {
     width: 44px; height: 44px; border-radius: 50%;
     background: var(--brand); color: #fff; border: none;
@@ -200,12 +183,10 @@
     box-shadow: var(--shadow-card); border-radius: var(--radius-md);
     min-width: 180px; z-index: 90; overflow: hidden;
   }
-  
   .add-menu-options button {
     display: flex; align-items: center; gap: 8px; width: 100%;
     padding: 0.75rem 1rem; border: none; background: transparent;
-    color: var(--ink); font-weight: 600; font-size: 0.85rem; cursor: pointer;
-    text-align: left;
+    color: var(--ink); font-weight: 600; font-size: 0.85rem; cursor: pointer; text-align: left;
   }
   .add-menu-options button:hover { background: var(--subcard); }
   .btn-add-dropdown:hover .add-menu-options { display: block; }
@@ -213,7 +194,6 @@
   .dot-despesa { width: 8px; height: 8px; border-radius: 50%; background: var(--stuck); }
   .dot-receita { width: 8px; height: 8px; border-radius: 50%; background: var(--done); }
 
-  /* Form Container */
   .form-row {
     background: var(--subcard); padding: 1.2rem;
     border: 1px solid var(--border-soft); border-radius: var(--radius-md);
@@ -221,7 +201,7 @@
   }
 
   .field { display: flex; flex-direction: column; gap: 0.35rem; }
-  .field label { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; }
+  .field label { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; }
 
   .field input, .field select {
     font-family: var(--font-ui); color: var(--ink);
@@ -246,7 +226,6 @@
   .btn.danger { background: transparent; border: 1px solid var(--stuck); color: var(--stuck); box-shadow: none; }
   .btn.small { min-height: 36px; padding: 0.35rem 0.75rem; font-size: 0.75rem; width: auto; }
 
-  /* Filters */
   .filters { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1.2rem; }
   .filters select, .filters input {
     font-family: var(--font-ui); font-size: 0.8rem;
@@ -255,17 +234,20 @@
     color: var(--ink); background: var(--surface); width: 100%;
   }
 
-  /* Table */
   .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-soft); border-radius: var(--radius-md); }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap; }
   thead th { text-align: left; font-size: 0.7rem; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; padding: 0.85rem 1rem; background: var(--subcard); border-bottom: 1px solid var(--border); }
   tbody td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-soft); color: var(--ink); }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 
+  .pill { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: #fff; text-transform: uppercase; }
+  .pill.pago { background: var(--done); }
+  .pill.pendente { background: var(--working); color: #000; }
+  .pill.fixo { background: var(--brand); }
+
   .amount-despesa { color: var(--stuck); font-weight: 700; }
   .amount-receita { color: var(--done); font-weight: 700; }
 
-  /* Dashboard */
   .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.85rem; margin-bottom: 1.5rem; }
   .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.1rem; position: relative; overflow: hidden; box-shadow: var(--shadow-card); }
   .kpi-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--brand); }
@@ -284,7 +266,7 @@
   @media (min-width: 768px) {
     .wrap { padding: 1.5rem; }
     .tabs-bar { flex-direction: row; justify-content: space-between; align-items: center; }
-    #tab-categorias .form-row { grid-template-columns: 2fr 1.5fr auto; }
+    #tab-categorias .form-row { grid-template-columns: 2fr 1.5fr 1.5fr auto; }
     #tab-lancamentos .form-row { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); align-items: end; }
     .btn { width: auto; }
     .filters { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); }
@@ -295,7 +277,6 @@
 <body>
 <div class="wrap">
 
-  <!-- Header Wordmark Banner Full-Width -->
   <header class="header-banner">
     <div class="brand-wordmark">
       <div class="brand-icon">R$</div>
@@ -316,7 +297,6 @@
     </div>
   </header>
 
-  <!-- Navegação de Abas -->
   <div class="tabs-bar">
     <div class="tabs-wrapper">
       <div class="tabs" id="tabs">
@@ -329,6 +309,7 @@
     <div class="dropdown-menu-container">
       <button class="btn ghost">Ferramentas ▾</button>
       <div class="dropdown-content">
+        <button onclick="gerarPDF()">Relatório PDF</button>
         <button onclick="exportarCSV()">Exportar CSV</button>
         <button onclick="exportarJSON()">Backup JSON</button>
         <button onclick="document.getElementById('importFile').click()">Importar JSON</button>
@@ -342,7 +323,7 @@
     <!-- TAB 1: CATEGORIAS -->
     <section id="tab-categorias">
       <h2 class="section-title">Categorias &amp; Orçamento</h2>
-      <p class="section-sub">Cadastre categorias de Despesa e Receita com seus orçamentos correspondentes.</p>
+      <p class="section-sub">Gerencie as categorias de Despesa e Receita com seus orçamentos correspondentes.</p>
 
       <div class="form-row">
         <input type="hidden" id="catIdEdit">
@@ -392,7 +373,6 @@
           <p class="section-sub">Registre entradas e saídas do seu controle financeiro.</p>
         </div>
 
-        <!-- Botão Seletor + Nova Despesa / Nova Receita -->
         <div class="btn-add-dropdown">
           <button class="btn-circle-add" title="Novo Lançamento">+</button>
           <div class="add-menu-options">
@@ -402,7 +382,6 @@
         </div>
       </div>
 
-      <!-- Formulário de Lançamento -->
       <div class="form-row" id="lancForm">
         <input type="hidden" id="lancIdEdit">
         <input type="hidden" id="lNatureza" value="Despesa">
@@ -446,7 +425,6 @@
         </div>
       </div>
 
-      <!-- Filtros -->
       <div class="filters">
         <select id="fNatureza">
           <option value="">Despesas e Receitas</option>
@@ -507,12 +485,40 @@
 (function(){
   "use strict";
 
+  // Mapeamento completo de Categorias Pré-Cadastradas (Prints Mobills)
+  const defaultCategories = [
+    // DESPESAS
+    {id:"c_alim", nome:"Alimentação", tipo:"Despesa", orcamento:1200},
+    {id:"c_assin", nome:"Assinaturas e serviços", tipo:"Despesa", orcamento:300},
+    {id:"c_bares", nome:"Bares e restaurantes", tipo:"Despesa", orcamento:500},
+    {id:"c_casa", nome:"Casa", tipo:"Despesa", orcamento:2000},
+    {id:"c_compras", nome:"Compras", tipo:"Despesa", orcamento:600},
+    {id:"c_cuid", nome:"Cuidados pessoais", tipo:"Despesa", orcamento:350},
+    {id:"c_div", nome:"Dívidas e empréstimos", tipo:"Despesa", orcamento:0},
+    {id:"c_educ", nome:"Educação", tipo:"Despesa", orcamento:800},
+    {id:"c_fam", nome:"Família e filhos", tipo:"Despesa", orcamento:500},
+    {id:"c_imp", nome:"Impostos e Taxas", tipo:"Despesa", orcamento:400},
+    {id:"c_inv_d", nome:"Investimentos", tipo:"Despesa", orcamento:1000},
+    {id:"c_lazer", nome:"Lazer e hobbies", tipo:"Despesa", orcamento:400},
+    {id:"c_merc", nome:"Mercado", tipo:"Despesa", orcamento:1500},
+    {id:"c_outros", nome:"Outros", tipo:"Despesa", orcamento:300},
+    {id:"c_pets", nome:"Pets", tipo:"Despesa", orcamento:250},
+    {id:"c_pres", nome:"Presentes e doações", tipo:"Despesa", orcamento:200},
+    {id:"c_roupas", nome:"Roupas", tipo:"Despesa", orcamento:300},
+    {id:"c_saude", nome:"Saúde", tipo:"Despesa", orcamento:600},
+    {id:"c_trab", nome:"Trabalho", tipo:"Despesa", orcamento:200},
+    {id:"c_transp", nome:"Transporte", tipo:"Despesa", orcamento:500},
+    {id:"c_viagem", nome:"Viagem", tipo:"Despesa", orcamento:0},
+    
+    // RECEITAS
+    {id:"c_emp_r", nome:"Empréstimos", tipo:"Receita", orcamento:0},
+    {id:"c_inv_r", nome:"Investimentos", tipo:"Receita", orcamento:0},
+    {id:"c_outras_r", nome:"Outras receitas", tipo:"Receita", orcamento:0},
+    {id:"c_salario", nome:"Salário", tipo:"Receita", orcamento:5000}
+  ];
+
   const defaultState = {
-    categorias: [
-      {id:"c1", nome:"Moradia", tipo:"Despesa", orcamento:1500},
-      {id:"c2", nome:"Alimentação", tipo:"Despesa", orcamento:800},
-      {id:"c3", nome:"Salário", tipo:"Receita", orcamento:5000}
-    ],
+    categorias: defaultCategories,
     lancamentos: []
   };
 
@@ -565,7 +571,6 @@
     document.getElementById("fCategoria").innerHTML = `<option value="">Todas as categorias</option>` + state.categorias.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
   }
 
-  /* PREPARAR FORMULÁRIO DESPESA / RECEITA */
   window.prepararFormLancamento = function(natureza){
     document.getElementById("lNatureza").value = natureza;
     const btnSalvar = document.getElementById("addLancamento");
@@ -736,7 +741,6 @@
       <div class="kpi-card"><div class="kpi-label">SALDO LÍQUIDO</div><div class="kpi-value ${saldoLiquido>=0?'green':'red'}">${fmtBRL(saldoLiquido)}</div></div>
     `;
 
-    // Gráfico de Gastos por Categoria
     const catsDespesa = state.categorias.filter(c=>c.tipo==="Despesa");
     const catLabels = catsDespesa.map(c=>c.nome);
     const catGastos = catsDespesa.map(c=>state.lancamentos.filter(l=>l.categoriaId===c.id).reduce((s,l)=>s+l.valor,0));
@@ -749,7 +753,6 @@
       options: { responsive: true, maintainAspectRatio: false }
     });
 
-    // Gráfico Receita vs Despesa
     const ctxFixVar = document.getElementById("chartFixVar").getContext("2d");
     if(chartFixVarInstance) chartFixVarInstance.destroy();
     chartFixVarInstance = new Chart(ctxFixVar, {
@@ -758,6 +761,94 @@
       options: { responsive: true, maintainAspectRatio: false }
     });
   }
+
+  /* GERADOR DE PDF */
+  window.gerarPDF = function(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(91, 95, 237);
+    doc.text("Relatório de Controle Financeiro", 14, 20);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 28);
+
+    const despesas = state.lancamentos.filter(l=>l.natureza==="Despesa").reduce((s,l)=>s+l.valor,0);
+    const receitas = state.lancamentos.filter(l=>l.natureza==="Receita").reduce((s,l)=>s+l.valor,0);
+
+    doc.setFontSize(11);
+    doc.setTextColor(0);
+    doc.text(`Receitas: R$ ${receitas.toFixed(2)}  |  Despesas: R$ ${despesas.toFixed(2)}  |  Saldo: R$ ${(receitas - despesas).toFixed(2)}`, 14, 38);
+
+    const rows = state.lancamentos.map(l=>{
+      const cat = state.categorias.find(c=>c.id===l.categoriaId);
+      return [
+        new Date(l.data+"T00:00:00").toLocaleDateString("pt-BR"),
+        l.natureza,
+        cat ? cat.nome : "Geral",
+        l.descricao,
+        `R$ ${l.valor.toFixed(2)}`,
+        l.status
+      ];
+    });
+
+    doc.autoTable({
+      startY: 45,
+      head: [['Data', 'Natureza', 'Categoria', 'Descrição', 'Valor', 'Status']],
+      body: rows,
+      headStyles: { fillColor: [91, 95, 237] }
+    });
+
+    doc.save("relatorio_financeiro.pdf");
+  };
+
+  /* EXPORTAÇÃO E IMPORTAÇÃO */
+  window.exportarCSV = function(){
+    let csv = "Data;Natureza;Categoria;Descrição;Valor;Status;Forma\n";
+    state.lancamentos.forEach(l=>{
+      const cat = state.categorias.find(c=>c.id===l.categoriaId);
+      csv += `${l.data};${l.natureza};"${cat ? cat.nome : 'Geral'}";"${l.descricao}";${l.valor};${l.status};${l.forma}\n`;
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `controle_financeiro.csv`;
+    link.click();
+  };
+
+  window.exportarJSON = function(){
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+    const link = document.createElement("a");
+    link.href = dataStr;
+    link.download = `backup_financeiro.json`;
+    link.click();
+  };
+
+  window.importarJSON = function(event){
+    const file = event.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      try {
+        const imported = JSON.parse(e.target.result);
+        if(imported.categorias && imported.lancamentos){
+          state.categorias = imported.categorias;
+          state.lancamentos = imported.lancamentos;
+          saveState();
+          populaCategoriaSelects();
+          renderAll();
+          alert("Dados importados com sucesso!");
+        }
+      } catch(err){
+        alert("Erro ao importar o arquivo JSON.");
+      }
+    };
+    reader.readAsText(file);
+  };
 
   window.toggleDarkMode = function(){
     document.body.classList.toggle("dark-mode");
