@@ -41,12 +41,12 @@
     --font-display: 'Plus Jakarta Sans', sans-serif;
     --font-ui: 'Inter', sans-serif;
 
-    --cat-0: #e83e8c; --cat-0-bg: #fce8f3;
-    --cat-1: #28a745; --cat-1-bg: #e2f0d9;
-    --cat-2: #6f42c1; --cat-2-bg: #f0e6ff;
-    --cat-3: #fd7e14; --cat-3-bg: #fff0e6;
-    --cat-4: #20c997; --cat-4-bg: #e6f8f3;
-    --cat-5: #17a2b8; --cat-5-bg: #e3f2fd;
+    --cat-0: #e83e8c;
+    --cat-1: #28a745;
+    --cat-2: #6f42c1;
+    --cat-3: #fd7e14;
+    --cat-4: #20c997;
+    --cat-5: #17a2b8;
   }
 
   body.dark-mode {
@@ -80,11 +80,26 @@
     min-height: 100vh;
   }
 
-  /* Ajuste de setas do input number para o modo escuro */
+  /* Remoção do Quadrado Branco nos Inputs Numéricos */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  input[type=number]:hover::-webkit-inner-spin-button,
+  input[type=number]:hover::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button;
+    opacity: 0.5;
+    background: transparent;
+    cursor: pointer;
+  }
+
   body.dark-mode input[type=number]::-webkit-inner-spin-button,
   body.dark-mode input[type=number]::-webkit-outer-spin-button {
-    filter: invert(0.8);
-    opacity: 0.6;
+    filter: invert(0.9);
   }
 
   .wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 1rem; }
@@ -149,7 +164,6 @@
   }
   .tab-btn.active { background: var(--brand); color: #ffffff; box-shadow: 0 4px 12px rgba(91, 95, 237, 0.3); }
 
-  /* Menu de Opções no Canto */
   .dropdown-menu-container { position: relative; margin-left: auto; }
   
   .btn-icon-dots {
@@ -278,7 +292,6 @@
   .kpi-value.green { color: var(--done); }
   .kpi-value.red { color: var(--stuck); }
 
-  /* Estilos do Novo Card "Maiores Gastos do Mês Atual" */
   .top-expenses-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -288,86 +301,39 @@
     margin-bottom: 1.5rem;
   }
 
-  .top-expenses-header {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 1.25rem;
-  }
+  .top-expenses-header { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 1.25rem; }
 
-  .top-expenses-body {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    align-items: center;
-  }
+  .top-expenses-body { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: center; }
 
   @media (min-width: 600px) {
-    .top-expenses-body {
-      grid-template-columns: 1.2fr 1fr;
-    }
+    .top-expenses-body { grid-template-columns: 1.2fr 1fr; }
   }
 
-  .top-expenses-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
+  .top-expenses-list { display: flex; flex-direction: column; gap: 0.85rem; }
 
   .top-expense-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-soft);
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-soft);
   }
-
   .top-expense-row:last-child { border-bottom: none; }
 
-  .top-expense-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
+  .top-expense-info { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 600; }
 
   .top-expense-badge {
-    width: 34px; height: 34px;
-    border-radius: 50%;
+    width: 34px; height: 34px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
   }
 
-  .top-expense-pct {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ink);
-  }
+  .top-expense-pct { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
 
-  .donut-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    height: 180px;
-  }
+  .donut-container { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; height: 180px; }
 
   .btn-ver-relatorio {
-    margin-top: 1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--ink-soft);
-    padding: 0.5rem 1.2rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.825rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+    margin-top: 1rem; background: var(--surface); border: 1px solid var(--border);
+    color: var(--ink-soft); padding: 0.5rem 1.2rem; border-radius: var(--radius-sm);
+    font-size: 0.825rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
   }
-
   .btn-ver-relatorio:hover { background: var(--subcard); color: var(--ink); }
 
   @media (min-width: 768px) {
@@ -387,7 +353,7 @@
       <div class="brand-icon">R$</div>
       <div class="brand-titles">
         <h1>Controle Financeiro</h1>
-        <p>Categorias · Lançamentos · Dashboard</p>
+        <p>Dashboard · Categorias · Lançamentos</p>
       </div>
     </div>
 
@@ -402,12 +368,13 @@
     </div>
   </header>
 
+  <!-- Ordem Reordenada das Abas -->
   <div class="tabs-bar">
     <div class="tabs-wrapper">
       <div class="tabs" id="tabs">
-        <button class="tab-btn active" data-tab="categorias">Categorias</button>
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="categorias">Categorias</button>
         <button class="tab-btn" data-tab="lancamentos">Lançamentos</button>
-        <button class="tab-btn" data-tab="dashboard">Dashboard</button>
       </div>
     </div>
 
@@ -429,8 +396,29 @@
 
   <main class="card">
 
-    <!-- TAB 1: CATEGORIAS -->
-    <section id="tab-categorias">
+    <!-- TAB 1: DASHBOARD (Aba Inicial) -->
+    <section id="tab-dashboard">
+      <h2 class="section-title">Dashboard Analítico</h2>
+      <p class="section-sub">Resumo das despesas, receitas e fluxo líquido.</p>
+
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="top-expenses-card">
+        <div class="top-expenses-header">Maiores gastos do mês atual</div>
+        <div class="top-expenses-body">
+          <div class="top-expenses-list" id="topExpensesList"></div>
+          <div class="donut-container">
+            <div style="width: 160px; height: 160px; position: relative;">
+              <canvas id="chartTopDonut"></canvas>
+            </div>
+            <button class="btn-ver-relatorio" onclick="irParaLancamentos()">Ver relatório</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CATEGORIAS -->
+    <section id="tab-categorias" style="display:none;">
       <h2 class="section-title">Categorias</h2>
       <p class="section-sub">Gerencie as categorias de Despesa e Receita com seus valores teto/meta correspondentes.</p>
 
@@ -473,9 +461,8 @@
       </div>
     </section>
 
-    <!-- TAB 2: LANÇAMENTOS -->
+    <!-- TAB 3: LANÇAMENTOS -->
     <section id="tab-lancamentos" style="display:none;">
-      
       <div class="add-action-bar">
         <div>
           <h2 class="section-title">Lançamentos</h2>
@@ -568,29 +555,6 @@
       </div>
     </section>
 
-    <!-- TAB 3: DASHBOARD -->
-    <section id="tab-dashboard" style="display:none;">
-      <h2 class="section-title">Dashboard Analítico</h2>
-      <p class="section-sub">Resumo das despesas, receitas e fluxo líquido.</p>
-
-      <div class="kpi-grid" id="kpiGrid"></div>
-
-      <!-- Novo Card: Maiores Gastos do Mês Atual por Categoria -->
-      <div class="top-expenses-card">
-        <div class="top-expenses-header">Maiores gastos do mês atual</div>
-        <div class="top-expenses-body">
-          <div class="top-expenses-list" id="topExpensesList"></div>
-          <div class="donut-container">
-            <div style="width: 160px; height: 160px; position: relative;">
-              <canvas id="chartTopDonut"></canvas>
-            </div>
-            <button class="btn-ver-relatorio" onclick="irParaLancamentos()">Ver relatório</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
   </main>
 </div>
 
@@ -652,7 +616,7 @@
   const dataExtenso = hoje.toLocaleDateString("pt-BR", { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   document.getElementById("todayBadge").textContent = dataExtenso.charAt(0).toUpperCase() + dataExtenso.slice(1);
 
-  let activeTab = "categorias";
+  let activeTab = "dashboard";
   const fmtBRL = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
   const uid = () => "id"+Math.random().toString(36).slice(2,9);
 
@@ -663,7 +627,7 @@
     if(!btn) return;
     activeTab = btn.dataset.tab;
     document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b===btn));
-    ["categorias","lancamentos","dashboard"].forEach(t=>{
+    ["dashboard","categorias","lancamentos"].forEach(t=>{
       document.getElementById("tab-"+t).style.display = (t===activeTab)?"block":"none";
     });
     if(activeTab==="dashboard") renderDashboard();
@@ -673,7 +637,7 @@
     document.querySelectorAll('.tab-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.tab === 'lancamentos');
     });
-    ["categorias","lancamentos","dashboard"].forEach(t=>{
+    ["dashboard","categorias","lancamentos"].forEach(t=>{
       document.getElementById("tab-"+t).style.display = (t==='lancamentos')?"block":"none";
     });
     activeTab = 'lancamentos';
@@ -689,7 +653,6 @@
     document.getElementById("fCategoria").innerHTML = `<option value="">Todas as categorias</option>` + state.categorias.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
   }
 
-  /* PREPARAR FORMULÁRIO E DESVINCULAR STATUS PAGO/RECEBIDO */
   window.prepararFormLancamento = function(natureza){
     document.getElementById("lNatureza").value = natureza;
     const btnSalvar = document.getElementById("addLancamento");
@@ -854,7 +817,7 @@
     });
   });
 
-  /* DASHBOARD COM O NOVO CARD "MAIORES GASTOS" */
+  /* DASHBOARD */
   function renderDashboard(){
     const despesas = state.lancamentos.filter(l=>l.natureza==="Despesa").reduce((s,l)=>s+l.valor,0);
     const receitas = state.lancamentos.filter(l=>l.natureza==="Receita").reduce((s,l)=>s+l.valor,0);
@@ -866,7 +829,6 @@
       <div class="kpi-card"><div class="kpi-label">SALDO LÍQUIDO</div><div class="kpi-value ${saldoLiquido>=0?'green':'red'}">${fmtBRL(saldoLiquido)}</div></div>
     `;
 
-    // Cálculo das Top Categorias de Despesa para o Card
     const catsDespesa = state.categorias.filter(c=>c.tipo==="Despesa");
     const catGastosMap = catsDespesa.map((c, idx) => {
       const valor = state.lancamentos.filter(l=>l.categoriaId===c.id && l.natureza==="Despesa").reduce((s,l)=>s+l.valor,0);
@@ -893,7 +855,6 @@
       }).join("");
     }
 
-    // Gráfico Donut para os Maiores Gastos
     const donutLabels = top5Cats.map(c => c.nome);
     const donutData = top5Cats.map(c => c.valor);
     const donutColors = ['#e83e8c', '#28a745', '#6f42c1', '#fd7e14', '#20c997'];
